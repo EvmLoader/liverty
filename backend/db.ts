@@ -33,7 +33,7 @@ export class SequelizeSingleton {
       }
     );
     this.models = this.initModels();
-    this.syncDatabase();
+    // this.syncDatabase();
   }
 
   public static getInstance(): SequelizeSingleton {
@@ -55,7 +55,8 @@ export class SequelizeSingleton {
 
   private async syncDatabase() {
     try {
-      await this.sequelize.sync({ alter: true });
+      await this.sequelize.sync({ alter: true, });
+      console.info("Database synchronized successfully.");
     } catch (error) {
       console.error("Database sync failed:", error);
       throw error;

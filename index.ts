@@ -1,5 +1,3 @@
-// File: backend/index.ts
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 require("dotenv").config();
 import "./module-alias-setup";
@@ -9,7 +7,7 @@ import { MashServer } from "@b/index";
 import { setupDefaultRoutes, setupProcessEventHandlers } from "@b/utils";
 import { rolesManager } from "@b/utils/roles";
 import * as path from "path";
-import "@b/db";
+import db from "@b/db";
 import { models } from "@b/db";
 import { initialize } from "@b/utils/eco/scylla/client";
 import { MatchingEngine } from "@b/utils/eco/matchingEngine";
@@ -28,6 +26,10 @@ app.cors();
 
 const initializeApp = async () => {
   try {
+    console.log("syncing database");
+    // await db.getSequelize().sync({ force: true, logging: true });
+    console.log("Database synchronized successfully.");
+
     const extensionsData = await models.extension.findAll({
       where: { status: true },
     });
@@ -98,6 +100,7 @@ const initializeApp = async () => {
       }
     }
   } catch (error) {
+    console.log("error", error);
     logger(
       "error",
       "app",
